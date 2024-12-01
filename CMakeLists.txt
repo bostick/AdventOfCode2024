@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(advent2024)
 
+add_subdirectory(day1)
+
+add_subdirectory(day1part2)
+
 
 
 
