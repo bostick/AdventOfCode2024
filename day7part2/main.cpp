@@ -15,6 +15,9 @@
 #define TAG "day7part2"
 
 
+static_assert(sizeof(long long) == sizeof(int64_t));
+
+
 bool compute(int64_t first, std::vector<int64_t> rest, int64_t last);
 
 
@@ -25,6 +28,7 @@ int main(int argc, char **argv) {
     const char *path = argv[1];
 
     std::vector<uint8_t> buf;
+    buf.reserve(25000);
 
     if (openFile(path, buf) != OK) {
         return EXIT_FAILURE;
@@ -42,17 +46,20 @@ int main(int argc, char **argv) {
     int64_t total = 0;
 
 
+    std::vector<int64_t> rands;
+    rands.reserve(50);
+
     while (newline != NULL) {
 
 
-        std::vector<int64_t> rands;
+        rands.clear();
 
 
         std::string line = std::string(tosearch, newline);
         
-        const char *lineEnd = line.c_str() + line.size();
-
         const char *tosearch2 = line.c_str();
+
+        const char *lineEnd = tosearch2 + line.size();
 
         const char *colon = strchr(tosearch2, ':');
 
@@ -62,6 +69,9 @@ int main(int argc, char **argv) {
 
         tosearch2 = colon + 1;
 
+        //
+        // ' ' after ':'
+        //
         tosearch2 = tosearch2 + 1;
         
         const char *space = strchr(tosearch2, ' ');
@@ -112,9 +122,9 @@ int main(int argc, char **argv) {
 }
 
 
-bool stringEnds(int64_t a, int64_t b);
+size_t intLen(int64_t a);
 
-int64_t stringDrop(int64_t a, int64_t b);
+lldiv_t shift(int64_t a, int64_t b);
 
 
 bool compute(int64_t first, std::vector<int64_t> rest, int64_t last) {
@@ -131,15 +141,18 @@ bool compute(int64_t first, std::vector<int64_t> rest, int64_t last) {
 
     rest.pop_back();
 
-    if ((last % pen == 0) && compute(first, rest, last / pen)) {
+    auto x = lldiv(last, pen);
+    if ((x.rem == 0) && compute(first, rest, x.quot)) {
         return true;
     }
 
-    if ((0 <= last - pen) && compute(first, rest, last - pen)) {
+    auto y = (last - pen);
+    if ((0 <= y) && compute(first, rest, y)) {
         return true;
     }
 
-    if (stringEnds(last, pen) && compute(first, rest, stringDrop(last, pen))) {
+    auto z = shift(last, pen);
+    if ((z.rem == pen) && compute(first, rest, z.quot)) {
         return true;
     }
 
@@ -161,131 +174,33 @@ size_t intLen(int64_t a) {
         return 3;
     }
 
-    if (a < 10000) {
-        return 4;
-    }
+    ASSERT(false);
 
-    if (a < 100000) {
-        return 5;
-    }
-
-    if (a < 1000000) {
-        return 6;
-    }
-
-    if (a < 10000000) {
-        return 7;
-    }
-
-    if (a < 100000000) {
-        return 8;
-    }
-
-    if (a < 1000000000) {
-        return 9;
-    }
-
-    if (a < 10000000000) {
-        return 10;
-    }
-
-    if (a < 100000000000) {
-        return 11;
-    }
-
-    if (a < 1000000000000) {
-        return 12;
-    }
-
-    if (a < 10000000000000) {
-        return 13;
-    }
-
-    if (a < 100000000000000) {
-        return 14;
-    }
-
-    if (a < 1000000000000000) {
-        return 15;
-    }
-
-    if (a < 10000000000000000) {
-        return 16;
-    }
-
-    if (a < 100000000000000000) {
-        return 17;
-    }
-
-    if (a < 1000000000000000000) {
-        return 18;
-    }
-
-    return 19;
+    return 0;
 }
 
 
-bool stringEnds(int64_t a, int64_t b) {
-
-    static_assert(sizeof(long long) == sizeof(int64_t));
-
-    size_t bLen = intLen(b);
-
-    if (bLen == 1) {
-        
-        return (a % 10) == b;
-        
-    } else if (bLen == 2) {
-        
-        return (a % 100) == b;
-        
-    } else if (bLen == 3) {
-        
-        return (a % 1000) == b;
-        
-    } else {
-        
-        for (int i = 0; i < bLen; i++) {
-
-            auto aRes = std::lldiv(a, 10);
-            auto bRes = std::lldiv(b, 10);
-
-            if (aRes.rem != bRes.rem) {
-                return false;
-            }
-            
-            a = aRes.quot;
-            b = bRes.quot;
-        }
-    }
-
-    return true;
-}
-
-
-int64_t stringDrop(int64_t a, int64_t b) {
+lldiv_t shift(int64_t a, int64_t b) {
 
     size_t bLen = intLen(b);
 
     if (bLen == 1) {
 
-        return (a / 10);
+        return lldiv(a, 10);
 
     } else if (bLen == 2) {
 
-        return (a / 100);
+        return lldiv(a, 100);
 
     } else if (bLen == 3) {
 
-        return (a / 1000);
+        return lldiv(a, 1000);
 
     } else {
 
-        for (int i = 0; i < bLen; i++) {
-            a /= 10;
-        }
+        ASSERT(false);
 
-        return a;
+        return {};
     }
 }
 
