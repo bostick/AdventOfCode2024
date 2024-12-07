@@ -9,6 +9,11 @@ logged in with GitHub
 first day with an incorrect submission
 
 
+## day 7
+
+first day that cannot just be brute forced
+
+
 
 
 
