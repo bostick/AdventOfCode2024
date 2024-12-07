@@ -15,7 +15,7 @@
 #define TAG "day7part2"
 
 
-bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs);
+bool compute(int64_t first, std::vector<int64_t> rest, int64_t last);
 
 
 int main(int argc, char **argv) {
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 
         std::string lhsStr = std::string(tosearch2, colon);
 
-        int64_t lhs = parseInt64(lhsStr);
+        int64_t last = parseInt64(lhsStr);
 
         tosearch2 = colon + 1;
 
@@ -86,17 +86,17 @@ int main(int argc, char **argv) {
         rands.push_back(rand);
 
 
-        int acc = rands[0];
+        int64_t first = rands.front();
 
         auto rest = rands;
         rest.erase(rest.begin());
 
         bool res;
-        res = compute(acc, rest, lhs);
+        res = compute(first, rest, last);
 
 
         if (res) {
-            total += lhs;
+            total += last;
         }
 
 
@@ -112,37 +112,34 @@ int main(int argc, char **argv) {
 }
 
 
+bool stringEnds(int64_t a, int64_t b);
 
-int64_t concat(int64_t a, int64_t b);
+int64_t stringDrop(int64_t a, int64_t b);
 
 
-bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs) {
-
-    if (lhs < acc) {
-        return false;
-    }
+bool compute(int64_t first, std::vector<int64_t> rest, int64_t last) {
 
     if (rest.empty()) {
-        if (acc == lhs) {
+        if (first == last) {
             return true;
         } else {
             return false;
         }
     }
 
-    int64_t first = rest[0];
-    
-    rest.erase(rest.begin());
+    int64_t pen = rest.back();
 
-    if (compute(acc * first, rest, lhs)) {
+    rest.pop_back();
+
+    if ((last % pen == 0) && compute(first, rest, last / pen)) {
         return true;
     }
 
-    if (compute(acc + first, rest, lhs)) {
+    if ((0 <= last - pen) && compute(first, rest, last - pen)) {
         return true;
     }
 
-    if (compute(concat(acc, first), rest, lhs)) {
+    if (stringEnds(last, pen) && compute(first, rest, stringDrop(last, pen))) {
         return true;
     }
 
@@ -150,7 +147,7 @@ bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs) {
 }
 
 
-int intLen(int64_t a) {
+size_t intLen(int64_t a) {
 
     if (a < 10) {
         return 1;
@@ -228,17 +225,68 @@ int intLen(int64_t a) {
 }
 
 
-int64_t concat(int64_t a, int64_t b) {
+bool stringEnds(int64_t a, int64_t b) {
 
-    int bLen = intLen(b);
+    static_assert(sizeof(long long) == sizeof(int64_t));
 
-    int64_t res = a;
-    for (int i = 0; i < bLen; i++) {
-        res *= 10;
+    size_t bLen = intLen(b);
+
+    if (bLen == 1) {
+        
+        return (a % 10) == b;
+        
+    } else if (bLen == 2) {
+        
+        return (a % 100) == b;
+        
+    } else if (bLen == 3) {
+        
+        return (a % 1000) == b;
+        
+    } else {
+        
+        for (int i = 0; i < bLen; i++) {
+
+            auto aRes = std::lldiv(a, 10);
+            auto bRes = std::lldiv(b, 10);
+
+            if (aRes.rem != bRes.rem) {
+                return false;
+            }
+            
+            a = aRes.quot;
+            b = bRes.quot;
+        }
     }
-    res += b;
 
-    return res;
+    return true;
+}
+
+
+int64_t stringDrop(int64_t a, int64_t b) {
+
+    size_t bLen = intLen(b);
+
+    if (bLen == 1) {
+
+        return (a / 10);
+
+    } else if (bLen == 2) {
+
+        return (a / 100);
+
+    } else if (bLen == 3) {
+
+        return (a / 1000);
+
+    } else {
+
+        for (int i = 0; i < bLen; i++) {
+            a /= 10;
+        }
+
+        return a;
+    }
 }
 
 
