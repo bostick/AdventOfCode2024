@@ -118,6 +118,10 @@ int64_t concat(int64_t a, int64_t b);
 
 bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs) {
 
+    if (lhs < acc) {
+        return false;
+    }
+
     if (rest.empty()) {
         if (acc == lhs) {
             return true;
@@ -130,11 +134,11 @@ bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs) {
     
     rest.erase(rest.begin());
 
-    if (compute(acc + first, rest, lhs)) {
+    if (compute(acc * first, rest, lhs)) {
         return true;
     }
 
-    if (compute(acc * first, rest, lhs)) {
+    if (compute(acc + first, rest, lhs)) {
         return true;
     }
 
@@ -146,10 +150,95 @@ bool compute(int64_t acc, std::vector<int64_t> rest, int64_t lhs) {
 }
 
 
+int intLen(int64_t a) {
+
+    if (a < 10) {
+        return 1;
+    }
+
+    if (a < 100) {
+        return 2;
+    }
+
+    if (a < 1000) {
+        return 3;
+    }
+
+    if (a < 10000) {
+        return 4;
+    }
+
+    if (a < 100000) {
+        return 5;
+    }
+
+    if (a < 1000000) {
+        return 6;
+    }
+
+    if (a < 10000000) {
+        return 7;
+    }
+
+    if (a < 100000000) {
+        return 8;
+    }
+
+    if (a < 1000000000) {
+        return 9;
+    }
+
+    if (a < 10000000000) {
+        return 10;
+    }
+
+    if (a < 100000000000) {
+        return 11;
+    }
+
+    if (a < 1000000000000) {
+        return 12;
+    }
+
+    if (a < 10000000000000) {
+        return 13;
+    }
+
+    if (a < 100000000000000) {
+        return 14;
+    }
+
+    if (a < 1000000000000000) {
+        return 15;
+    }
+
+    if (a < 10000000000000000) {
+        return 16;
+    }
+
+    if (a < 100000000000000000) {
+        return 17;
+    }
+
+    if (a < 1000000000000000000) {
+        return 18;
+    }
+
+    return 19;
+}
+
+
 int64_t concat(int64_t a, int64_t b) {
-    std::string res = std::to_string(a) ;
-    res += std::to_string(b);
-    return parseInt64(res);
+
+    int bLen = intLen(b);
+
+    int64_t res = a;
+    for (int i = 0; i < bLen; i++) {
+        res *= 10;
+    }
+    res += b;
+
+    return res;
 }
 
 
