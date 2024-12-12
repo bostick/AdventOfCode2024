@@ -103,8 +103,10 @@ int main(int argc, char **argv) {
 
         auto capture2 = m.str(2);
                 
-        int n1 = parseInt(capture1);
-        int n2 = parseInt(capture2);
+        int n1;
+        parseInt(capture1, &n1);
+        int n2;
+        parseInt(capture2, &n2);
 
         Rule rule = Rule{n1, n2};
 
@@ -144,7 +146,8 @@ int main(int argc, char **argv) {
 
             std::string uStr = std::string(tosearch2, comma);
 
-            int u = parseInt(uStr);
+            int u;
+            parseInt(uStr, &u);
 
             update.push_back(PageNumber{u});
 
@@ -155,7 +158,8 @@ int main(int argc, char **argv) {
 
         std::string uStr = std::string(tosearch2, lineEnd);
 
-        int u = parseInt(uStr);
+        int u;
+        parseInt(uStr, &u);
 
         update.push_back(PageNumber{u});
 

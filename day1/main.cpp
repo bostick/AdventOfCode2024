@@ -53,8 +53,10 @@ int main(int argc, char **argv) {
 
         auto capture2 = m.str(2);
                 
-        int n1 = parseInt(capture1);
-        int n2 = parseInt(capture2);
+        int n1;
+        parseInt(capture1, &n1);
+        int n2;
+        parseInt(capture2, &n2);
 
         col1.push_back(n1);
         col2.push_back(n2);

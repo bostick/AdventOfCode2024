@@ -115,7 +115,8 @@ int main(int argc, char **argv) {
         while (space != NULL) {
 
             std::string levelStr = std::string(tosearch2, space);
-            int level = parseInt(levelStr);
+            int level;
+            parseInt(levelStr, &level);
             report.push_back(level);
 
             tosearch2 = space + 1;
@@ -125,7 +126,8 @@ int main(int argc, char **argv) {
         }
 
         std::string levelStr = std::string(tosearch2, lineEnd);
-        int level = parseInt(levelStr);
+        int level;
+        parseInt(levelStr, &level);
         report.push_back(level);
 
         // LOGI("report: %zu", report.size());

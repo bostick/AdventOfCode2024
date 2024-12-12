@@ -52,8 +52,10 @@ int main(int argc, char **argv) {
         auto str1 = match.str(1);
         auto str2 = match.str(2);
 
-        auto i1 = parseInt(str1);
-        auto i2 = parseInt(str2);
+        int i1;
+        parseInt(str1, &i1);
+        int i2;
+        parseInt(str2, &i2);
 
         auto prod = i1 * i2;
         

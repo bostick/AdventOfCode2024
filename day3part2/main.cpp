@@ -75,8 +75,10 @@ int main(int argc, char **argv) {
                 // LOGD("str2: %s", str2.c_str());
                 // LOGD("str3: %s", str3.c_str());
 
-                auto i2 = parseInt(str2);
-                auto i3 = parseInt(str3);
+                int i2;
+                parseInt(str2, &i2);
+                int i3;
+                parseInt(str3, &i3);
 
                 auto prod = i2 * i3;
                 

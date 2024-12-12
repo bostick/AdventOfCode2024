@@ -58,7 +58,8 @@ int main(int argc, char **argv) {
 
         std::string lhsStr = std::string(tosearch2, colon);
 
-        int64_t lhs = parseInt64(lhsStr);
+        int64_t lhs;
+        parseInt64(lhsStr, &lhs);
 
         tosearch2 = colon + 1;
 
@@ -70,7 +71,8 @@ int main(int argc, char **argv) {
 
             std::string randStr = std::string(tosearch2, space);
 
-            int64_t rand = parseInt64(randStr);
+            int64_t rand;
+            parseInt64(randStr, &rand);
 
             rands.push_back(rand);
 
@@ -81,7 +83,8 @@ int main(int argc, char **argv) {
         
         std::string randStr = std::string(tosearch2, lineEnd);
 
-        int64_t rand = parseInt64(randStr);
+        int64_t rand;
+        parseInt64(randStr, &rand);
 
         rands.push_back(rand);
 

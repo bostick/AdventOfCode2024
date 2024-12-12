@@ -1,7 +1,19 @@
 
 cmake_minimum_required(VERSION 3.10)
 
+#
+# De-duplicate libraries on link lines based on linker capabilities.
+#
+# fixes Xcode complaining:
+# ld: warning: ignoring duplicate libraries: 'libcommon.a'
+#
+cmake_policy(SET CMP0156 NEW)
+
 project(advent2024)
+
+
+enable_testing()
+
 
 add_subdirectory(day1)
 
